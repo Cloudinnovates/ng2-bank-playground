@@ -1,10 +1,11 @@
-import { Component, Output, EventEmitter } from '@angular/core';
+import {Component, Output, EventEmitter, ChangeDetectionStrategy} from '@angular/core';
 import {Router} from "@angular/router";
-import {AccountsService} from "../service/accounts";
+import {AccountsService} from "../services/account-service";
 
 
 @Component({
-    selector: "account-create",
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    selector: "account-form",
     template: `
     <form class="form">
         <label>
@@ -29,19 +30,20 @@ import {AccountsService} from "../service/accounts";
 
 `
 })
-export class AccountCreateForm {
+export class AccountFormComponent {
     newAccount = {
         name: "",
         description: ""
     };
 
-    constructor(private accounts:AccountsService, private router: Router){}
+    constructor(private accounts: AccountsService, private router: Router) {
+    }
 
-    createAccount(){
+    createAccount() {
         const {name, description} = this.newAccount;
         if (name && description) {
-           this.accounts.createAccount(name, description)
-               .then(() => this.router.navigate([""]))
+            this.accounts.createAccount(name, description)
+                .then(() => this.router.navigate(["/accounts"]))
 
         }
     }

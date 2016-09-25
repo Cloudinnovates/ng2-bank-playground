@@ -1,11 +1,9 @@
-import { Component } from '@angular/core';
-import {UserService} from "../service";
-import {Router} from "@angular/router";
+import {Component} from '@angular/core';
+import {AuthService} from "../../auth/services/auth-service";
 
 @Component({
-    selector: "app-bar",
-    template:
-`
+    selector: "app-header",
+    template: `
 <nav class="navbar navbar-default">
     <div class="container-fluid">
         <!-- Brand and toggle get grouped for better mobile display -->
@@ -23,11 +21,12 @@ import {Router} from "@angular/router";
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
             <ul class="nav navbar-nav">
-                <li [routerLink]="['']" routerLinkActive="active"><a href="#" >My Account</a></li>
+                <li><a [routerLink]="['/accounts']" >My Account</a></li>
+                <li><a [routerLink]="['/profile']" >My Profile</a></li>
             </ul>
             
             <ul class="nav navbar-nav navbar-right">
-                <li><a>{{ userService.name }}</a></li>
+                <li><a>{{ authService.name }}</a></li>
                 <li><a href="#" (click)="logout()">Logout</a></li>
             </ul>
         </div><!-- /.navbar-collapse -->
@@ -36,12 +35,13 @@ import {Router} from "@angular/router";
 </nav>
 `
 })
-export class AppBar {
+export class AppHeaderComponent {
 
-    constructor(private userService: UserService){}
+    constructor(private authService: AuthService) {
+    }
 
-    logout(){
-        this.userService.logout()
+    logout() {
+        this.authService.logout()
     }
 
 }

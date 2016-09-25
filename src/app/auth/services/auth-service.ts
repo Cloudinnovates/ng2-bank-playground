@@ -1,14 +1,9 @@
 import {Injectable} from "@angular/core";
+import {Router} from "@angular/router";
 import {FirebaseAuth, FirebaseAuthState, AuthProviders} from 'angularfire2';
-import 'rxjs/add/operator/do';
-import 'rxjs/add/operator/map';
-import 'rxjs/add/operator/take';
-
-import { CanActivate, Router } from '@angular/router';
-import { Observable } from 'rxjs/Observable';
 
 @Injectable()
-export class UserService {
+export class AuthService {
 
     private authState: FirebaseAuthState = null;
 
@@ -30,33 +25,23 @@ export class UserService {
         return this.authenticated ? this.authState.auth.providerData[0].displayName : '';
     }
 
-    login() {
-        return this.auth$.login()
-            .then(()=> this.router.navigate(["/"]))
+    loginWithGoogle(){
+        return this.login(AuthProviders.Google)
+    }
+
+    loginWithTwitter(){
+        return this.login(AuthProviders.Twitter)
+    }
+
+    private login(provider: AuthProviders) {
+        return this.auth$.login(provider)
+            .then(()=> this.router.navigate(["/accounts"]))
             .catch(error => console.log('ERROR @ AuthService#signIn() :', error))
     }
 
     logout() {
         this.auth$.logout();
-        this.router.navigate(["/auth"]);
+        this.router.navigate(["/"]);
     }
 
-}
-
-
-@Injectable()
-export class AuthGuard implements CanActivate {
-
-  constructor(private auth: UserService, private router: Router) {}
-
-  canActivate(): Observable<boolean> {
-    return this.auth.auth$
-      .take(1)
-      .map(authState => !!authState)
-      .do(authenticated => {
-        if (!authenticated) {
-          this.router.navigate(['/auth']);
-        }
-      });
-  }
 }
