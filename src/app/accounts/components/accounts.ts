@@ -1,12 +1,19 @@
 import { Component, OnInit } from '@angular/core';
 import {AccountsService} from "../services/account-service";
+import { Store } from '@ngrx/store';
+import {IAccount} from "../models/account";
+import {Observable} from "rxjs";
+
+interface AppState {
+    accounts: IAccount[]
+}
 
 @Component({
     template: `
     <div class="row">
         <div class="col-md-10">
             <account-list 
-            [accounts]="accountsService.accounts$ | async" 
+            [accounts]="accounts | async" 
             (remove)="accountsService.removeAccount($event)">    
             </account-list>    
         </div>
@@ -19,10 +26,17 @@ import {AccountsService} from "../services/account-service";
 })
 export class AccountsComponent implements OnInit {
 
-    constructor(public accountsService: AccountsService){}
+    accounts: Observable<{}>;
+
+    constructor(public accountsService: AccountsService, public store: Store<AppState>){
+        this.accounts = store.select(state => state);
+    }
 
     ngOnInit() {
         // fetch accounts data
-        this.accountsService.fetchAccounts();
+        this.accountsService.fetchAccounts()
+            .subscribe(data=>{
+                this.store.dispatch({type: "LOAD_ACCOUNTS", payload: data});
+        })
     }
 }

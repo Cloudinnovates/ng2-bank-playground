@@ -25,10 +25,7 @@ export class AccountsService {
     }
 
     fetchAccounts() {
-         this.getAccountsCollection().subscribe(data=>{
-            this.accounts$.next(data);
-        });
-
+         return this.getAccountsCollection();
     }
 
     createAccount(accountName: string, accountDescription: string) {

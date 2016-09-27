@@ -16,6 +16,8 @@ import {TransactionFormComponent} from "./components/transaction-form";
 import {AccountKeyPipe} from "./directives/account-key";
 import {SharedModule} from "../shared/index";
 
+import {StoreModule} from "@ngrx/store"
+import {accounts} from "./reducer"
 
 const routes: Routes = [
     {path: 'accounts', component: AccountsComponent, canActivate: [AuthGuard]},
@@ -40,7 +42,8 @@ const routes: Routes = [
         CommonModule,
         FormsModule,
         SharedModule,
-        RouterModule.forChild(routes)
+        RouterModule.forChild(routes),
+        StoreModule.provideStore(accounts)
     ],
     providers: [
         AccountsService,
