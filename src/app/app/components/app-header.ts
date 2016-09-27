@@ -15,7 +15,7 @@ import {AuthService} from "../../auth/services/auth-service";
                 <span class="icon-bar"></span>
                 <span class="icon-bar"></span>
             </button>
-            <a class="navbar-brand" href="#">Bank</a>
+            <a class="navbar-brand" href="#"><i class="fa fa-money" aria-hidden="true"></i> Bank</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->

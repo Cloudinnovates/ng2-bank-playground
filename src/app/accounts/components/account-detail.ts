@@ -16,7 +16,9 @@ import 'rxjs/add/operator/do';
     <div>
         Detail of account <strong>{{ (account$ | async)?.name }}</strong>
         <p>{{ (account$ | async)?.description }}</p>
-        <a class="btn btn-primary" [routerLink]="['/accounts/detail/'+(account$ | async)?.$key+'/create-transaction']"><i class="fa fa-plus"></i> New transaction</a>
+        <a class="btn btn-primary" [routerLink]="['/accounts/detail/'+(account$ | async)?.$key+'/create-transaction']">
+            <i class="fa fa-plus"></i> New transaction
+        </a>
         <transaction-list 
           [incomingTransactions]="incomingTransactions"
           [outcomingTransactions]="outcomingTransactions"
@@ -41,8 +43,8 @@ export class AccountDetailComponent implements OnInit, OnDestroy {
             (param: any) => {
                 this.account$ = this.accountService.getAccountByKey(param["key"]);
                 this.account$.subscribe(account => {
-                        this.incomingTransactions = this.transactionService.getIncomingTransactionsForAccount(account)
-                        this.outcomingTransactions = this.transactionService.getOutcomingTransactionsForAccount(account)
+                        this.incomingTransactions = this.transactionService.getIncomingTransactionsForAccount(account);
+                        this.outcomingTransactions = this.transactionService.getOutcomingTransactionsForAccount(account);
                     });
             }
         )

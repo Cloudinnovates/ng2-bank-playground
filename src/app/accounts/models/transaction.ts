@@ -1,8 +1,8 @@
 export interface ITransaction {
-    createdAt?: number,
-    amount: number,
-    from: string,
-    to: string
+    amount: number;
+    from: string;
+    to: string;
+    createdAt?: number;
 }
 
 export class Transaction implements ITransaction {

@@ -35,5 +35,4 @@ export class AccountsService {
         return this.af.database.object("/accounts/"+key)
     }
 
-
 }

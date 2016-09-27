@@ -22,6 +22,7 @@ import {ITransaction} from "../models/transaction";
     
     <div class="col-md-6">
         <h4>Outcomming Transactions:</h4>
+        <alert [message]="'No Transaction'" *ngIf="(outcomingTransactions | async)?.length == 0"></alert>
         <ul class="list-group">
             <li class="list-group-item"
                 *ngFor="let transaction of outcomingTransactions | async"    
