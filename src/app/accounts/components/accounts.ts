@@ -1,12 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {AccountsService} from "../services/account-service";
 import { Store } from '@ngrx/store';
-import {IAccount} from "../models/account";
 import {Observable} from "rxjs";
+import {AppState} from "../reducer";
 
-interface AppState {
-    accounts: IAccount[]
-}
 
 @Component({
     template: `
@@ -35,8 +32,5 @@ export class AccountsComponent implements OnInit {
     ngOnInit() {
         // fetch accounts data
         this.accountsService.fetchAccounts()
-            .subscribe(data=>{
-                this.store.dispatch({type: "LOAD_ACCOUNTS", payload: data});
-        })
     }
 }
