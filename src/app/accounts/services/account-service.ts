@@ -1,20 +1,34 @@
-import {AngularFire, FirebaseListObservable, FirebaseObjectObservable} from 'angularfire2';
+import {AngularFire, FirebaseObjectObservable} from 'angularfire2';
 import {Injectable} from '@angular/core';
 import {AuthService} from "../../auth";
 import {IAccount} from "../models/account";
 
+import { BehaviorSubject } from "rxjs/BehaviorSubject";
+
 @Injectable()
 export class AccountsService {
 
-    accounts$: FirebaseListObservable<IAccount[]>;
+
+    accounts$: BehaviorSubject<IAccount[]> = new BehaviorSubject([]);
 
     constructor(private af: AngularFire, private authService: AuthService) {
-        this.accounts$ = this.af.database.list("/accounts", {
+        
+    }
+
+    private getAccountsCollection(){
+        return this.af.database.list("/accounts", {
             query: {
                 orderByChild: "userId",
-                equalTo: authService.id
+                equalTo: this.authService.id
             }
+        })
+    }
+
+    fetchAccounts() {
+         this.getAccountsCollection().subscribe(data=>{
+            this.accounts$.next(data);
         });
+
     }
 
     createAccount(accountName: string, accountDescription: string) {
@@ -28,7 +42,7 @@ export class AccountsService {
     }
 
     removeAccount(account: IAccount){
-        return this.accounts$.remove(account.$key);
+        this.getAccountsCollection().remove(account.$key);
     }
 
     getAccountByKey(key: string): FirebaseObjectObservable<IAccount>{

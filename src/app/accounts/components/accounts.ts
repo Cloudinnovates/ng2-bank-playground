@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {AccountsService} from "../services/account-service";
 
 @Component({
@@ -6,7 +6,7 @@ import {AccountsService} from "../services/account-service";
     <div class="row">
         <div class="col-md-10">
             <account-list 
-            [accounts]="accountsService.accounts$" 
+            [accounts]="accountsService.accounts$ | async" 
             (remove)="accountsService.removeAccount($event)">    
             </account-list>    
         </div>
@@ -17,8 +17,12 @@ import {AccountsService} from "../services/account-service";
 `
 
 })
-export class AccountsComponent {
+export class AccountsComponent implements OnInit {
 
     constructor(public accountsService: AccountsService){}
 
+    ngOnInit() {
+        // fetch accounts data
+        this.accountsService.fetchAccounts();
+    }
 }

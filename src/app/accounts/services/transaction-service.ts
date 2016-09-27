@@ -16,7 +16,6 @@ export class TransactionService {
     constructor(private af: AngularFire, private authService: AuthService) {}
 
     public getIncomingTransactionsForAccount(account: IAccount): FirebaseListObservable<ITransaction[]>{
-        console.log(1);
         // todo: check if account$ belongs to the current user
         return this.af.database.list(this.TRANSACTION_PATH, {
             query : {
@@ -27,7 +26,6 @@ export class TransactionService {
     }
 
     public getOutcomingTransactionsForAccount(account: IAccount): FirebaseListObservable<ITransaction[]>{
-        console.log(2);
         // todo: check if account$ belongs to the current user
         return this.af.database.list(this.TRANSACTION_PATH, {
             query : {
@@ -37,50 +35,18 @@ export class TransactionService {
         })
     }
 
-    public getAllIncoming(account: IAccount){
-
-        this.getIncomingTransactionsForAccount(account)
-            .scan((x, y) => {
-                console.log(x, y);
-                return 1;
-            }, 0);
-    }
-
-    public getAllOutgoing(account: IAccount){
-        return this.getIncomingTransactionsForAccount(account)
-    }
-
-    public getAccount2Balance(account: IAccount) {
-
-        return Observable.forkJoin([
-                this.getIncomingTransactionsForAccount(account),
-                this.getOutcomingTransactionsForAccount(account)
-            ], (incoming, outcoming) => {
-                let totalIncoming = incoming.map((i) => i.amount).reduce((a, b) => a + b, 0);
-                let totalOutComming = outcoming.map((i) => i.amount).reduce((a, b) => a + b, 0);
-                let result = {
-                    account: account.$key,
-                    balance: totalIncoming - totalOutComming
-                };
-                console.log(result);
-                return result;
-            })
-    }
-
     public getAccountBalance(account: IAccount) {
 
         return Observable.combineLatest(
-            this.getIncomingTransactionsForAccount(account).take(1),
-            this.getOutcomingTransactionsForAccount(account).take(1)
+            this.getIncomingTransactionsForAccount(account),
+            this.getOutcomingTransactionsForAccount(account)
         , (incoming, outcoming) => {
                 let totalIncoming = incoming.map((i) => i.amount).reduce((a, b) => a + b, 0);
                 let totalOutComming = outcoming.map((i) => i.amount).reduce((a, b) => a + b, 0);
-                let result = {
+                return {
                     account: account.$key,
                     balance: totalIncoming - totalOutComming
                 };
-                console.log(result);
-                return result;
             }
         );
     }
