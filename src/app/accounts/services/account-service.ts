@@ -13,6 +13,7 @@ export class AccountsService {
 
 
     accounts$: BehaviorSubject<IAccount[]> = new BehaviorSubject([]);
+    accountsLoading$: BehaviorSubject<boolean> = new BehaviorSubject(false);
 
     constructor(
         private af: AngularFire,
@@ -31,9 +32,11 @@ export class AccountsService {
     }
 
     fetchAccounts() {
+        this.accountsLoading$.next(true);
          return this.getAccountsCollection()
             .subscribe(data=>{
                 this._store.dispatch(new LoadAccountsAction(data));
+                this.accountsLoading$.next(false);
                 data.forEach((account: IAccount)=> {
                     this.transactionService.getAccountBalance(account).subscribe(accountInfo => {
                         this._store.dispatch(new LoadBalanceAction(accountInfo));

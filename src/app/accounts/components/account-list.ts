@@ -12,6 +12,16 @@ import {TransactionService} from "../services/transaction-service";
             [message]="'You don\\'t have any account'">
         </alert>
         
+        <ul class="list-group" *ngIf="accountsLoadingInProgress">
+            <li class="list-group-item">
+                <div style="background: #eaeaea;"><br></div>
+                <br>
+                <div style="background: #eaeaea; width: 70%"><br></div>
+                <br><br>
+                <div style="background: #eaeaea; width: 30%"><br></div>
+            </li>
+        </ul>
+        
         <ul class="list-group">
             <li class="list-group-item" *ngFor="let account of _accounts;trackBy:identify;let i=index" highlight>
               
@@ -29,13 +39,12 @@ import {TransactionService} from "../services/transaction-service";
 })
 export class AccountListComponent {
 
-
+    @Input() accountsLoadingInProgress;
     @Input() set accounts(value) {
         this._accounts = value;
     }
 
     _accounts: IAccount[] = [];
-    _balances: {account: string, balance: number}[] = [];
 
     @Output() remove = new EventEmitter();
 

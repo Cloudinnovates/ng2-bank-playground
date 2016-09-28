@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import {AccountsService} from "../services/account-service";
 import { Store } from '@ngrx/store';
-import {Observable} from "rxjs";
+import {Observable, BehaviorSubject} from "rxjs";
 import {AppState} from "../models/actions";
 
 
@@ -10,7 +10,8 @@ import {AppState} from "../models/actions";
     <div class="row">
         <div class="col-md-10">
             <account-list 
-            [accounts]="accounts | async" 
+            [accounts]="accounts | async"
+            [accountsLoadingInProgress]="accountsService.accountsLoading$ | async"
             (remove)="accountsService.removeAccount($event)">    
             </account-list>    
         </div>
@@ -25,6 +26,7 @@ export class AccountsComponent implements OnInit {
 
     accounts: Observable<{}>;
 
+
     constructor(public accountsService: AccountsService, private _store: Store<AppState>){
         this.accounts = _store.select(state => {
             return state.accounts
@@ -32,6 +34,7 @@ export class AccountsComponent implements OnInit {
     }
 
     ngOnInit() {
+
         // fetch accounts data
         this.accountsService.fetchAccounts()
     }
