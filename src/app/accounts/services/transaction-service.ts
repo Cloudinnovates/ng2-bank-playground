@@ -1,6 +1,6 @@
 import {AngularFire, FirebaseListObservable} from "angularfire2";
 import {AuthService} from "../../auth/services/auth-service";
-import {IAccount} from "../models/account";
+import {IAccount, IAccountBalanceInfo} from "../models/account";
 import {Injectable} from "@angular/core";
 import {ITransaction} from "../models/transaction";
 import "rxjs/add/operator/reduce";
@@ -35,7 +35,7 @@ export class TransactionService {
         })
     }
 
-    public getAccountBalance(account: IAccount) {
+    public getAccountBalance(account: IAccount): Observable<IAccountBalanceInfo> {
 
         return Observable.combineLatest(
             this.getIncomingTransactionsForAccount(account),

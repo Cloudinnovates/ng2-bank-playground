@@ -11,6 +11,7 @@ class Account implements IAccount {
     name: string;
     description: string;
     userId: string;
+    balance?: number;
     createdAt: number = firebase.database['ServerValue']['TIMESTAMP'];
 
     constructor(name: string, description: string){
@@ -18,4 +19,9 @@ class Account implements IAccount {
         this.description = description;
     }
 
+}
+
+export interface IAccountBalanceInfo {
+    account: string;
+    balance: number;
 }

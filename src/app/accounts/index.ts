@@ -17,7 +17,7 @@ import {AccountKeyPipe} from "./directives/account-key";
 import {SharedModule} from "../shared/index";
 
 import {StoreModule} from "@ngrx/store"
-import {accounts} from "./reducer"
+import {accountsReducer} from "./models/reducer";
 
 const routes: Routes = [
     {path: 'accounts', component: AccountsComponent, canActivate: [AuthGuard]},
@@ -43,7 +43,7 @@ const routes: Routes = [
         FormsModule,
         SharedModule,
         RouterModule.forChild(routes),
-        StoreModule.provideStore(accounts)
+        StoreModule.provideStore(accountsReducer)
     ],
     providers: [
         AccountsService,

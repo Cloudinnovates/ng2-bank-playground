@@ -21,7 +21,7 @@ import {TransactionService} from "../services/transaction-service";
                 <div class="pointer" [routerLink]="['/accounts/detail/'+account.$key]">
                     <strong>Name: </strong>{{ account.name }} ({{ account.$key }})<br>
                     <p>{{ account.description }}</p><br>
-                    <p>Balance: {{ _balances[i]?.balance }}</p>  
+                    <p>Balance: {{ account.balance }}</p>  
                 </div>
             </li>
         </ul>        
@@ -32,7 +32,6 @@ export class AccountListComponent {
 
     @Input() set accounts(value) {
         this._accounts = value;
-        this.getBalances();
     }
 
     _accounts: IAccount[] = [];
@@ -40,20 +39,9 @@ export class AccountListComponent {
 
     @Output() remove = new EventEmitter();
 
-    constructor(public transactionService: TransactionService) {
-    }
-
     identify(index, item: IAccount) {
         //do what ever logic you need to come up with the unique identifier of your item in loop, i will just return the object id.
         return item.name;
-    }
-
-    getBalances() {
-        this._accounts.forEach((value, index)=> {
-            this.transactionService.getAccountBalance(value).subscribe(value=> {
-                this._balances[index] = value;
-            });
-        });
     }
 
 }

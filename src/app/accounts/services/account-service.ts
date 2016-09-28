@@ -5,7 +5,8 @@ import {IAccount} from "../models/account";
 
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import {Store} from "@ngrx/store";
-import {AppState, LoadAccountsAction} from "../reducer";
+import {AppState, LoadAccountsAction, LoadBalanceAction} from "../models/actions";
+import {TransactionService} from "./transaction-service";
 
 @Injectable()
 export class AccountsService {
@@ -13,8 +14,12 @@ export class AccountsService {
 
     accounts$: BehaviorSubject<IAccount[]> = new BehaviorSubject([]);
 
-    constructor(private af: AngularFire, private authService: AuthService, private store: Store<AppState>) {
-    }
+    constructor(
+        private af: AngularFire,
+        private authService: AuthService,
+        private _store: Store<AppState>,
+        private transactionService: TransactionService
+    ) {}
 
     private getAccountsCollection(){
         return this.af.database.list("/accounts", {
@@ -28,8 +33,13 @@ export class AccountsService {
     fetchAccounts() {
          return this.getAccountsCollection()
             .subscribe(data=>{
-                this.store.dispatch(new LoadAccountsAction(data));
+                this._store.dispatch(new LoadAccountsAction(data));
+                data.forEach((account: IAccount)=> {
+                    this.transactionService.getAccountBalance(account).subscribe(accountInfo => {
+                        this._store.dispatch(new LoadBalanceAction(accountInfo));
+                    });
             })
+        });
     }
 
     createAccount(accountName: string, accountDescription: string) {
