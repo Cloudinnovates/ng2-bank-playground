@@ -1,6 +1,10 @@
 import {ActionReducer, Action} from "@ngrx/store";
 import {AppState, LOAD_ACCOUNTS, LOAD_BALANCE} from "./actions";
 
+const initialState : AppState = {
+    accounts: []
+};
+
 const accountBalanceReducer = (state, action: Action) => {
     switch(action.type) {
         case LOAD_BALANCE:
@@ -17,7 +21,7 @@ const accountBalanceReducer = (state, action: Action) => {
     }
 };
 
-export const accountsReducer: ActionReducer<AppState> = (state: AppState = {accounts: []}, action: Action) => {
+export const accountsReducer: ActionReducer<AppState> = (state: AppState = initialState, action: Action) => {
     console.log("Action: ", action, "State: ", state);
     switch (action.type){
         case LOAD_ACCOUNTS:
