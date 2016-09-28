@@ -5,7 +5,7 @@ import {IAccount} from "../models/account";
 
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import {Store} from "@ngrx/store";
-import {AppState, LoadAccountsAction, LoadBalanceAction} from "../models/actions";
+import {AppState, LoadAccountsAction, LoadBalanceAction, AccountCreateAction} from "../models/actions";
 import {TransactionService} from "./transaction-service";
 
 @Injectable()
@@ -52,7 +52,9 @@ export class AccountsService {
             userId: this.authService.id
         };
         return this.af.database.list("/accounts")
-            .push(account)
+            .push(account).then(account => {
+                this._store.dispatch(new AccountCreateAction(account))
+            })
     }
 
     removeAccount(account: IAccount){
