@@ -1,6 +1,21 @@
 import {ActionReducer, Action} from "@ngrx/store";
 import {AppState, LOAD_ACCOUNTS, LOAD_BALANCE} from "./actions";
 
+const accountBalanceReducer = (state, action: Action) => {
+    switch(action.type) {
+        case LOAD_BALANCE:
+            return state.map(account => {
+                    if(account.$key === action.payload.account){
+                        return Object.assign({}, account, {
+                            balance: action.payload.balance
+                        });
+                    }
+                    return account;
+                });
+        default:
+            return state;
+    }
+};
 
 export const accountsReducer: ActionReducer<AppState> = (state: AppState = {accounts: []}, action: Action) => {
     console.log("Action: ", action, "State: ", state);
@@ -11,14 +26,7 @@ export const accountsReducer: ActionReducer<AppState> = (state: AppState = {acco
             };
         case LOAD_BALANCE:
             return Object.assign({}, state, {
-                accounts: state.accounts.map(account => {
-                    if(account.$key === action.payload.account){
-                        return Object.assign({}, account, {
-                            balance: action.payload.balance
-                        });
-                    }
-                    return account;
-                })
+                accounts: accountBalanceReducer(state.accounts, action)
             });
         case "REMOVE_ACCOUNT":
             return state;
@@ -27,5 +35,4 @@ export const accountsReducer: ActionReducer<AppState> = (state: AppState = {acco
         default:
             return state;
     }
-
-}
+};
