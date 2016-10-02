@@ -26,10 +26,13 @@ export class ProfileMapComponent implements OnInit {
     constructor(private mapService: MapService){}
 
     ngOnInit(): void {
+        // create map and register on click event
         this.map = this.mapService.createMap("map");
         this.map.on("click", this.onMapClick.bind(this));
+
+        // subscribe to current location to update marker position
         this.currentLocation.subscribe(location => {
-            console.log("location changed ", location);
+
             if(location){
                 this.replaceMarker(location)
             }
@@ -38,10 +41,12 @@ export class ProfileMapComponent implements OnInit {
 
     replaceMarker(location: ILocationPoint){
         if(this.marker){
+            // if marker is already present - remove
             this.map.removeLayer(this.marker);
-            this.marker = this.mapService.createMarker(location, "Your position");
-            this.map.addLayer(this.marker);
         }
+        // create new marker
+        this.marker = this.mapService.createMarker(location, "Your position");
+        this.map.addLayer(this.marker);
     }
 
     onMapClick(e) {
@@ -49,7 +54,6 @@ export class ProfileMapComponent implements OnInit {
             lat: e.latlng.lat,
             lng: e.latlng.lng
         };
-        console.log(e, message, this.updateCurrentLocation);
         this.updateCurrentLocation.next(message);
     }
 

@@ -22,11 +22,10 @@ export class ProfileComponent {
 
     constructor(private _store: Store<AppState>){
         this.currentLocation$ = this._store.select(state => {
-            return state.Profile.location;
+            return state.Profile.user.location;
         })
 
     }
-
 
     onLocationUpdate($event) {
         this._store.dispatch(new SaveUserLocationAction($event));
