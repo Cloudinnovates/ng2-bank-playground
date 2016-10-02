@@ -5,8 +5,9 @@ import {IAccount} from "../models/account";
 
 import { BehaviorSubject } from "rxjs/BehaviorSubject";
 import {Store} from "@ngrx/store";
-import {AppState, LoadAccountsAction, LoadBalanceAction, AccountCreateAction} from "../models/actions";
+import {LoadAccountsAction, LoadBalanceAction, AccountCreateAction} from "../models/actions";
 import {TransactionService} from "./transaction-service";
+import {AppState} from "../../app/index";
 
 @Injectable()
 export class AccountsService {

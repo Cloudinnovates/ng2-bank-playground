@@ -43,7 +43,6 @@ const routes: Routes = [
         FormsModule,
         SharedModule,
         RouterModule.forChild(routes),
-        StoreModule.provideStore(accountsReducer)
     ],
     providers: [
         AccountsService,

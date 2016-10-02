@@ -2,7 +2,9 @@ import { Component, OnInit } from '@angular/core';
 import {AccountsService} from "../services/account-service";
 import { Store } from '@ngrx/store';
 import {Observable, BehaviorSubject} from "rxjs";
-import {AppState} from "../models/actions";
+
+import {AppState} from "../../app/index";
+import {AccountsAppState} from "../models/reducer";
 
 
 @Component({
@@ -29,7 +31,7 @@ export class AccountsComponent implements OnInit {
 
     constructor(public accountsService: AccountsService, private _store: Store<AppState>){
         this.accounts = _store.select(state => {
-            return state.accounts
+            return state.Account.accounts;
         });
     }
 

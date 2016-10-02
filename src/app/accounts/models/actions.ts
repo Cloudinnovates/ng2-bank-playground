@@ -28,7 +28,3 @@ export class AccountCreateAction implements Action {
         this.payload = payload;
     }
 }
-
-export interface AppState {
-    accounts: IAccount[]
-}

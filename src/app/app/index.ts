@@ -9,7 +9,14 @@ import {ProfileModule} from "../profile";
 
 import {AppComponent} from './components/app';
 import {AppHeaderComponent} from './components/app-header';
+import {StoreModule, combineReducers} from "@ngrx/store";
+import {accountsReducer, AccountsAppState} from "../accounts/models/reducer";
+import {userReducer, ProfileAppState} from "../profile/models/reducer";
 
+export interface AppState {
+    Account: AccountsAppState,
+    Profile: ProfileAppState
+}
 
 @NgModule({
     bootstrap: [
@@ -22,6 +29,9 @@ import {AppHeaderComponent} from './components/app-header';
     imports: [
         BrowserModule,
         RouterModule.forRoot([], {useHash: false}),
+        StoreModule.provideStore(combineReducers({
+            Account: accountsReducer,
+            Profile: userReducer})),
         AuthModule,
         FirebaseModule,
         AccountsModule,

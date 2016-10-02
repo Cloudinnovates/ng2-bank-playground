@@ -1,7 +1,13 @@
 import {ActionReducer, Action} from "@ngrx/store";
-import {AppState, LOAD_ACCOUNTS, LOAD_BALANCE, ADD_ACCOUNT} from "./actions";
+import {LOAD_ACCOUNTS, LOAD_BALANCE, ADD_ACCOUNT} from "./actions";
+import {IAccount} from "./account";
 
-const initialState : AppState = {
+
+export interface AccountsAppState {
+    accounts: IAccount[]
+}
+
+const initialState : AccountsAppState = {
     accounts: []
 };
 
@@ -26,7 +32,7 @@ const accountBalanceReducer = (state, action: Action) => {
     }
 };
 
-export const accountsReducer: ActionReducer<AppState> = (state: AppState = initialState, action: Action) => {
+export const accountsReducer: ActionReducer<AccountsAppState> = (state: AccountsAppState = initialState, action: Action) => {
     console.log("Action: ", action, "State: ", state);
     switch (action.type){
         case LOAD_ACCOUNTS:
